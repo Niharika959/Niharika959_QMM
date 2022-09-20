@@ -1,0 +1,71 @@
+---
+  title: "Assignment 2"
+author: "Niharika D"
+date: "2022-09-20"
+output: pdf_document
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+**Linear Programming Problems**
+  $$ \text{The objective function is}\hspace{.2cm} Max \hspace{.3cm} z = 420(L_1+M_1+s_1)+360(L_2+M_2+s_2)+300(L_3+M_3+s_3)$$
+  
+  Subject to
+$$L_1+M_1+s_1 \le 750$$
+  $$L_2+M_2+s_2 \le 900$$
+  $$L_3+M_3+s_3 \le 450$$
+  $$20L_1+15M_1+12s_1 \le 1300$$
+  $$20L_2+15M_2+12s_2 \le 12000$$
+  $$20L_3+15M_3+12s_3 \le 5000$$
+  $$L_1+L2+L3 \le 900$$
+  $$M_1+M_2+M_3 \le 1200$$
+  $$s_1+s_2+s_3 \le 750$$
+  $$\text{Non Negative Constraints}\\
+L_1,L_2,L_3,M_1,M_2,M_3,s_1,s_2,s_3 \ge 0$$
+  The above LP problem constraints can be written as
+$$L_1+M_1+s_1+0L_2+0M_2+0s_2+0L_3+0M_3+0s_3 \le 750$$
+  $$0L_1+0M_1+0s_1+L_2+M_2+s_2+0L_3+0M_3+0s_3 \le 900$$
+  $$0L_1+0M_1+0s_1+0L_2+0M_2+0s_2+L_3+M_3+s_3 \le450$$
+  $$20L1_1+15M_1+12s_1+0L_2+0M_2+0s_2+0L_3+0M_3+0s_3 \le13000$$
+  $$0L_1+0M_1+0s_1+20L_2+15M_2+12s_2+0L_3+0M_3+0s_3 \le12000$$
+  $$0L_1+0M_1+0s_1+0L_2+0M_2+0s_2+20L_3+15M_3+12s_3 \le5000$$
+  $$L_1+0M_1+0s_1+L_2+0M_2+0s_2+L_3+0M_3+0s_3 \le900$$
+  $$0L_1+M_1+0s_1+0L_2+M_2+0s_2
++0L_3+M_3+0s_3 \le1200$$
+  $$0L_1+0M_1+s_1+0L_2+0M_2+s_2+0L_3+0M_3+s_3 \le750$$
+  
+  
+  
+  ```{r} 
+library("lpSolve")
+#Objective Function
+f.obj<-c(420,360,300,420,360,300,420,360,300)
+#Constraints
+f.con<-matrix(c(1,1,1,0,0,0,0,0,0,
+                0,0,0,1,1,1,0,0,0,
+                0,0,0,0,0,0,1,1,1,
+                20,15,12,0,0,0,0,0,0,
+                0,0,0,20,15,12,0,0,0,
+                0,0,0,0,0,0,20,15,12,
+                1,0,0,1,0,0,1,0,0,
+                0,1,0,0,1,0,0,1,0,
+                0,0,1,0,0,1,0,0,1),nrow=9,byrow=TRUE)
+#Set inequality signs
+f.dir<-c("<=",
+         "<=",
+         "<=",
+         "<=",
+         "<=",
+         "<=",
+         "<=",
+         "<=",
+         "<=")
+#Set right hand side coefficients
+f.rhs<-c(750,900,450,13000,12000,5000,900,1200,750)
+#Value of Z
+lp("max",f.obj,f.con,f.dir,f.rhs)
+lp("max",f.obj,f.con,f.dir,f.rhs)$solution               
+```
